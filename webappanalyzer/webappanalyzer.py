@@ -9,7 +9,7 @@ import requests
 from webappanalyzer.web_page import WebPage
 
 
-class Wappalyzer:
+class WebAppAnalyzer:
     def __init__(self, update: bool = False, path: pathlib.Path = pathlib.Path("data")):
         self._json_path: pathlib.Path = path
         path.mkdir(parents=True, exist_ok=True)
