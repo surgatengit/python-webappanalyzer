@@ -39,6 +39,7 @@ class WebAppAnalyzer:
                             "confidence": min(detection_result.get('confidence'), 100),
                             "cpe": content.get('cpe'),
                             "implies": detectors.get('implies'),
+                            "requires": [impl.lower() for impl in content.get("requires", [])],
                             "versions": detection_result.get("versions")
                         })
         resync: bool = True
@@ -58,7 +59,7 @@ class WebAppAnalyzer:
                                     if t.get("confidence") < 100:
                                         check_implies: bool = True
                                         t["confidence"] = 100
-                                    break
+                                    continue
                             if not found:
                                 to_add.add(sub.lower())
             for new_tech in to_add:
@@ -72,18 +73,28 @@ class WebAppAnalyzer:
                                 "confidence": 100,
                                 "cpe": content.get("cpe"),
                                 "implies": [impl.lower() for impl in content.get("implies", [])],
+                                "requires": [impl.lower() for impl in content.get("requires", [])],
                                 "versions": []
                             })
             to_add.clear()
+
+        tech_names: set[str] = {tech.get("tech").lower() for tech in detected}
 
         clean_detections: list[dict] = []
         for d in detected:
             if d.get("confidence") < 100:
                 continue
+            contains_required: bool = not d.get("requires")
+            for required in d.get("requires"):
+                if required.lower() in tech_names:
+                    contains_required: bool = True
+            if not contains_required:
+                continue
             d["version"] = None if not d.get("versions") else d.get("versions")[0]
             d.pop("implies")
             d.pop("confidence")
             d.pop("versions")
+            d.pop("requires")
             if d.get("cpe") and d["version"]:
                 d["cpe"] = ":".join(d["cpe"].split(":")[:5]+[d["version"]]+d["cpe"].split(":")[6:])
             clean_detections.append(d)
@@ -250,6 +261,7 @@ class WebAppAnalyzer:
         clean["html"] = self._process_list(tech_content.get("html", []))
         clean["scriptSrc"] = self._process_list(tech_content.get("scriptSrc", []))
         clean["implies"] = [impl.lower() for impl in tech_content.get("implies", [])]
+        clean["requires"] = [impl.lower() for impl in tech_content.get("requires", [])]
         clean["selector"] = self._process_dom(tech_content.get("dom", []))
         return clean
 
