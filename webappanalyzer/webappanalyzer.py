@@ -20,7 +20,7 @@ class WebAppAnalyzer:
         if len(list(path.iterdir())) != len(json_list) or update:
             for j in json_list:
                 with requests.get(f"https://raw.githubusercontent.com/enthec/webappanalyzer/main/src/technologies/{j}.json", stream=True) as r:
-                    with path.joinpath(f"{j}.json").open("w") as t:
+                    with path.joinpath(f"{j}.json").open("wb") as t:
                         for chunk in r.iter_content(chunk_size=8192):
                             t.write(chunk)
 
