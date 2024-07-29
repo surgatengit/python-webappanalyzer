@@ -25,6 +25,8 @@ class WebAppAnalyzer:
                             t.write(chunk)
 
         self.version_regexp = re.compile(r"^(?:(?P<prefix>.*)?\\(?P<group>\d+)(?:\?(?P<first>.*)?:(?P<second>.*)?)?|(?P<fixed>[a-zA-Z0-9.]+)?)$")
+        cpe_regex: str = r"""cpe:2\.3:[aho\*\-](:(((\?*|\*?)([a-zA-Z0-9\-\._]|(\\[\\\*\?!"#$$%&'\(\)\+,/:;<=>@\[\]\^`\{\|}~]))+(\?*|\*?))|[\*\-])){5}(:(([a-zA-Z]{2,3}(-([a-zA-Z]{2}|[0-9]{3}))?)|[\*\-]))(:(((\?*|\*?)([a-zA-Z0-9\-\._]|(\\[\\\*\?!"#$$%&'\(\)\+,/:;<=>@\[\]\^`\{\|}~]))+(\?*|\*?))|[\*\-])){4}"""
+        self._cpe_pattern: re.Pattern = re.compile(cpe_regex)
 
     def analyze(self, webpage: WebPage):
         detected: list[dict] = []
@@ -97,6 +99,8 @@ class WebAppAnalyzer:
             d.pop("requires")
             if d.get("cpe") and d["version"]:
                 d["cpe"] = ":".join(d["cpe"].split(":")[:5]+[d["version"]]+d["cpe"].split(":")[6:])
+                if not self._is_cpe_valid(d.get("cpe")):
+                    d.pop("cpe")
             clean_detections.append(d)
         return clean_detections
 
@@ -231,6 +235,9 @@ class WebAppAnalyzer:
             "version": version,
             "confidence": 0 if not is_match else extra_tags.get("confidence")
         }
+
+    def _is_cpe_valid(self, cpe: str) -> bool:
+        return not not self._cpe_pattern.match(cpe)
 
     def _format_version(self, current_match: re.Match, version: str) -> Optional[str]:
         data: re.Match = self.version_regexp.match(version)
