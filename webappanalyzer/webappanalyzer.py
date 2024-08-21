@@ -31,7 +31,7 @@ class WebAppAnalyzer:
     def analyze(self, webpage: WebPage):
         detected: list[dict] = []
         for file in self._json_path.iterdir():
-            with file.open("r") as techs:
+            with file.open("rb") as techs:
                 for technology, content in ijson.kvitems(techs, ""):
                     detectors: dict[str, list] = self._prepare_detectors(content)
                     detection_result: dict[str, Any] = self.detect(detectors, webpage)
@@ -66,7 +66,7 @@ class WebAppAnalyzer:
                                 to_add.add(sub.lower())
             for new_tech in to_add:
                 initial: str = new_tech[0] if new_tech[0] in string.ascii_lowercase else "_"
-                with self._json_path.joinpath(f"{initial}.json").open("r") as tech_file:
+                with self._json_path.joinpath(f"{initial}.json").open("rb") as tech_file:
                     for technology, content in ijson.kvitems(tech_file, ""):
                         if technology.lower() == new_tech.lower():
                             resync: bool = True
