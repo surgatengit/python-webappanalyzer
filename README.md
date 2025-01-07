@@ -1,5 +1,10 @@
 # python-webappanalyzer
 
+```bash
+git clone https://github.com/surgatengit/python-webappanalyzer && cd cd python-webappanalyzer/
+pip install -r requirements.txt
+```
+
 python implementation of the webappanalyzer detectors.
 
 ```python
