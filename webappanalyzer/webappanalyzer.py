@@ -20,7 +20,7 @@ class WebAppAnalyzer:
             self._categories_path: pathlib.Path = path / "categories_es.json"
         else:        
             self._categories_path: pathlib.Path = path / "categories.json"
-        
+        print(f"[DEBUG] Lang: {lang}")
         self._categories: dict = {}
         path.mkdir(parents=True, exist_ok=True)
 
