@@ -1,3 +1,4 @@
+import locale
 import pathlib
 import re
 import string
@@ -9,13 +10,18 @@ import requests
 
 from webappanalyzer.web_page import WebPage
 
-
 class WebAppAnalyzer:
     def __init__(self, update: bool = False, path: pathlib.Path = pathlib.Path("data")):
         self._json_path: pathlib.Path = path
-        self._categories_path: pathlib.Path = path / "categories.json"
-        self._categories: dict = {}
         
+        # Detectar idioma
+        lang, _ = locale.getdefaultlocale()
+        if lang and lang.startswith("es"):
+            self._categories_path: pathlib.Path = path / "categories_es.json"
+        else:        
+            self._categories_path: pathlib.Path = path / "categories.json"
+        
+        self._categories: dict = {}
         path.mkdir(parents=True, exist_ok=True)
 
         json_list = list(string.ascii_lowercase)
@@ -23,12 +29,19 @@ class WebAppAnalyzer:
 
         if len(list(path.iterdir())) != len(json_list) + 1 or update:
             for j in json_list:
-                with requests.get(f"https://raw.githubusercontent.com/enthec/webappanalyzer/main/src/technologies/{j}.json", stream=True) as r:
+                with requests.get(f"https://raw.githubusercontent.com/surgatengit/webappanalyzer/main/src/technologies/{j}.json", stream=True) as r:
                     with path.joinpath(f"{j}.json").open("wb") as t:
                         for chunk in r.iter_content(chunk_size=8192):
                             t.write(chunk)
 
-            with requests.get("https://raw.githubusercontent.com/enthec/webappanalyzer/main/src/categories.json", stream=True) as r:
+             # Descargar el archivo de categorías adecuado
+            categories_url = (
+                "https://raw.githubusercontent.com/surgatengit/python-webappanalyzer/main/src/categories_es.json"
+                if lang and lang.startswith("es")
+                else "https://raw.githubusercontent.com/surgatengit/webappanalyzer/main/src/categories.json"
+            )
+            
+            with requests.get(categories_url, stream=True) as r:
                 with self._categories_path.open("wb") as c:
                     for chunk in r.iter_content(chunk_size=8192):
                         c.write(chunk)
