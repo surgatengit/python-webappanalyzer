@@ -1,5 +1,7 @@
 # python-webappanalyzer
 
+forked from https://github.com/enthec/python-webappanalyzer with changes for CTFs.
+
 In the folder of your choice, copy, paste and run.
 ```bash
 git clone https://github.com/surgatengit/python-webappanalyzer && cd python-webappanalyzer && pip install -r requirements.txt && echo "Ready, Use: python scanwebtech.py <URL>"
