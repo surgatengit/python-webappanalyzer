@@ -15,7 +15,7 @@ class WebAppAnalyzer:
         self._json_path: pathlib.Path = path
         
         # Detectar idioma
-        lang, _ = locale.getdefaultlocale()
+        lang, _ = locale.getlocale()
         if lang and lang.startswith("es"):
             self._categories_path: pathlib.Path = path / "categories_es.json"
         else:        
