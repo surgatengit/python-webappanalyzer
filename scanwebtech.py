@@ -3,6 +3,9 @@ import requests
 from webappanalyzer.webappanalyzer import WebAppAnalyzer
 from webappanalyzer.web_page import WebPage
 import sys
+import warnings
+
+warnings.filterwarnings("ignore", category=FutureWarning)
 
 def analyze_website(url):
     response = requests.get(url, headers={"User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:127.0) Gecko/20100101 Firefox/127.0"})
