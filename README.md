@@ -1,8 +1,14 @@
 # python-webappanalyzer
 
+In the folder of your choice, copy, paste and run.
 ```bash
-git clone https://github.com/surgatengit/python-webappanalyzer && cd cd python-webappanalyzer/
-pip install -r requirements.txt
+git clone https://github.com/surgatengit/python-webappanalyzer && /
+cd python-webappanalyzer && /
+pip install -r requirements.txt && cd ..
+```
+Use
+```bash
+python scanwebtechs.py <URL>
 ```
 
 python implementation of the webappanalyzer detectors.
