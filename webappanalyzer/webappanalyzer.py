@@ -3,6 +3,7 @@ import re
 import string
 from typing import Optional, Any, Union
 
+import json
 import ijson
 import requests
 
@@ -12,38 +13,63 @@ from webappanalyzer.web_page import WebPage
 class WebAppAnalyzer:
     def __init__(self, update: bool = False, path: pathlib.Path = pathlib.Path("data")):
         self._json_path: pathlib.Path = path
+        self._categories_path: pathlib.Path = path / "categories.json"
+        self._categories: dict = {}
+        
         path.mkdir(parents=True, exist_ok=True)
 
         json_list = list(string.ascii_lowercase)
         json_list.append("_")
 
-        if len(list(path.iterdir())) != len(json_list) or update:
+        if len(list(path.iterdir())) != len(json_list) + 1 or update:
             for j in json_list:
                 with requests.get(f"https://raw.githubusercontent.com/enthec/webappanalyzer/main/src/technologies/{j}.json", stream=True) as r:
                     with path.joinpath(f"{j}.json").open("wb") as t:
                         for chunk in r.iter_content(chunk_size=8192):
                             t.write(chunk)
 
-        self.version_regexp = re.compile(r"^(?:(?P<prefix>.*)?\\(?P<group>\d+)(?:\?(?P<first>.*)?:(?P<second>.*)?)?|(?P<fixed>[a-zA-Z0-9.]+)?)$")
+            with requests.get("https://raw.githubusercontent.com/enthec/webappanalyzer/main/src/categories.json", stream=True) as r:
+                with self._categories_path.open("wb") as c:
+                    for chunk in r.iter_content(chunk_size=8192):
+                        c.write(chunk)
+        
+        # Load in memory categories
+        if self._categories_path.exists():
+            with self._categories_path.open("r", encoding="utf-8") as c:
+                self._categories = json.load(c)
+
+        self.version_regexp = re.compile(r"^(?:(?P<prefix>.*)?\\(?P<group>\d+)(?:\?(?P<first>.*)?:(?P<second>.*)?)?|(?P<fixed>[a-zA-Z0-9.]+)?)$")     
         cpe_regex: str = r"""cpe:2\.3:[aho\*\-](:(((\?*|\*?)([a-zA-Z0-9\-\._]|(\\[\\\*\?!"#$$%&'\(\)\+,/:;<=>@\[\]\^`\{\|}~]))+(\?*|\*?))|[\*\-])){5}(:(([a-zA-Z]{2,3}(-([a-zA-Z]{2}|[0-9]{3}))?)|[\*\-]))(:(((\?*|\*?)([a-zA-Z0-9\-\._]|(\\[\\\*\?!"#$$%&'\(\)\+,/:;<=>@\[\]\^`\{\|}~]))+(\?*|\*?))|[\*\-])){4}"""
         self._cpe_pattern: re.Pattern = re.compile(cpe_regex)
-
+        
     def analyze(self, webpage: WebPage):
         detected: list[dict] = []
         for file in self._json_path.iterdir():
+            if file.name == "categories.json":
+                continue
+
             with file.open("rb") as techs:
                 for technology, content in ijson.kvitems(techs, ""):
                     detectors: dict[str, list] = self._prepare_detectors(content)
                     detection_result: dict[str, Any] = self.detect(detectors, webpage)
+                    
                     if detection_result.get("match"):
+                        categories = [
+                            self._categories.get(str(cat_id), {}).get("name", "unknow")
+                            for cat_id in content.get("cats", [])
+                        ]
+
                         detected.append({
+                            "categories": categories,
                             "tech": technology,
+                            "description": content.get('description'),
                             "confidence": min(detection_result.get('confidence'), 100),
                             "cpe": content.get('cpe'),
                             "implies": detectors.get('implies'),
                             "requires": [impl.lower() for impl in content.get("requires", [])],
                             "versions": detection_result.get("versions")
                         })
+
         resync: bool = True
         while resync:
             resync: bool = False
@@ -72,6 +98,7 @@ class WebAppAnalyzer:
                             resync: bool = True
                             detected.append({
                                 "tech": technology,
+                                "description": content.get('description'),
                                 "confidence": 100,
                                 "cpe": content.get("cpe"),
                                 "implies": [impl.lower() for impl in content.get("implies", [])],
@@ -330,13 +357,15 @@ class WebAppAnalyzer:
         split: list[str] = pattern.split(r"\;")
         value: str = split[0] if split[0] else None
         extra_tags: dict[str, Optional[str]] = self._parse_extra_tag(split[1:])
+        # print(f"[DEBUG] Final regex: {value}")
         try:
             if value:
                 compiled: Optional[re.Pattern[str]] = re.compile(value, re.I)
             else:
                 compiled: Optional[re.Pattern[str]] = None
-        except re.error:
+        except re.error as e:
             compiled: Optional[re.Pattern[str]] = None
+            # print(f"[DEBUG] Error compiling regular expression: {e}")
         return {
             "attributes": {
                 "string": value,
