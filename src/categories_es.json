@@ -1,0 +1,706 @@
+{
+  "1": {
+    "groups": [
+      3
+    ],
+    "name": "CMS",
+    "priority": 1
+  },
+  "2": {
+    "groups": [
+      3,
+      4,
+      18
+    ],
+    "name": "Foros de mensajes",
+    "priority": 1
+  },
+  "3": {
+    "groups": [
+      5
+    ],
+    "name": "Gestores de bases de datos",
+    "priority": 2
+  },
+  "4": {
+    "groups": [
+      3
+    ],
+    "name": "Documentación",
+    "priority": 2
+  },
+  "5": {
+    "groups": [
+      6
+    ],
+    "name": "Widgets",
+    "priority": 9
+  },
+  "6": {
+    "groups": [
+      1
+    ],
+    "name": "Comercio electrónico",
+    "priority": 1
+  },
+  "7": {
+    "groups": [
+      3,
+      10
+    ],
+    "name": "Galerías de fotos",
+    "priority": 1
+  },
+  "8": {
+    "groups": [
+      3
+    ],
+    "name": "Wikis",
+    "priority": 1
+  },
+  "9": {
+    "groups": [
+      5,
+      7
+    ],
+    "name": "Paneles de alojamiento",
+    "priority": 2
+  },
+  "10": {
+    "groups": [
+      8
+    ],
+    "name": "Analíticas",
+    "priority": 9
+  },
+  "11": {
+    "groups": [
+      3
+    ],
+    "name": "Blogs",
+    "priority": 1
+  },
+  "12": {
+    "groups": [
+      9
+    ],
+    "name": "Frameworks de JavaScript",
+    "priority": 8
+  },
+  "13": {
+    "groups": [
+      3,
+      18
+    ],
+    "name": "Rastreadores de problemas",
+    "priority": 2
+  },
+  "14": {
+    "groups": [
+      10
+    ],
+    "name": "Reproductores de video",
+    "priority": 7
+  },
+  "15": {
+    "groups": [
+      3,
+      18
+    ],
+    "name": "Sistemas de comentarios",
+    "priority": 9
+  },
+  "16": {
+    "groups": [
+      11
+    ],
+    "name": "Seguridad",
+    "priority": 9
+  },
+  "17": {
+    "groups": [
+      9
+    ],
+    "name": "Scripts de fuentes",
+    "priority": 9
+  },
+  "18": {
+    "groups": [
+      9
+    ],
+    "name": "Frameworks web",
+    "priority": 7
+  },
+  "19": {
+    "groups": [
+      6
+    ],
+    "name": "Misceláneos",
+    "priority": 10
+  },
+  "20": {
+    "groups": [
+      9
+    ],
+    "name": "Editores",
+    "priority": 4
+  },
+  "21": {
+    "groups": [
+      3
+    ],
+    "name": "LMS",
+    "priority": 1
+  },
+  "22": {
+    "groups": [
+      7
+    ],
+    "name": "Servidores web",
+    "priority": 8
+  },
+  "23": {
+    "groups": [
+      7
+    ],
+    "name": "Caché",
+    "priority": 7
+  },
+  "24": {
+    "groups": [
+      3
+    ],
+    "name": "Editores de texto enriquecido",
+    "priority": 5
+  },
+  "25": {
+    "groups": [
+      9
+    ],
+    "name": "Gráficos JavaScript",
+    "priority": 6
+  },
+  "26": {
+    "groups": [
+      9
+    ],
+    "name": "Frameworks móviles",
+    "priority": 8
+  },
+  "27": {
+    "groups": [
+      9
+    ],
+    "name": "Lenguajes de programación",
+    "priority": 5
+  },
+  "28": {
+    "groups": [
+      7
+    ],
+    "name": "Sistemas operativos",
+    "priority": 6
+  },
+  "29": {
+    "groups": [
+      3
+    ],
+    "name": "Motores de búsqueda",
+    "priority": 4
+  },
+  "30": {
+    "groups": [
+      4
+    ],
+    "name": "Correo web",
+    "priority": 2
+  },
+  "31": {
+    "groups": [
+      7
+    ],
+    "name": "CDN",
+    "priority": 9
+  },
+  "32": {
+    "groups": [
+      2
+    ],
+    "name": "Automatización de marketing",
+    "priority": 9
+  },
+  "33": {
+    "groups": [
+      7
+    ],
+    "name": "Extensiones de servidor web",
+    "priority": 7
+  },
+  "34": {
+    "groups": [
+      7
+    ],
+    "name": "Bases de datos",
+    "priority": 5
+  },
+  "35": {
+    "groups": [
+      17
+    ],
+    "name": "Mapas",
+    "priority": 6
+  },
+  "36": {
+    "groups": [
+      2
+    ],
+    "name": "Publicidad",
+    "priority": 9
+  },
+  "37": {
+    "groups": [
+      7
+    ],
+    "name": "Dispositivos de red",
+    "priority": 2
+  },
+  "38": {
+    "groups": [
+      10,
+      7
+    ],
+    "name": "Servidores multimedia",
+    "priority": 1
+  },
+  "39": {
+    "groups": [
+      4
+    ],
+    "name": "Cámaras web",
+    "priority": 9
+  },
+  "41": {
+    "groups": [
+      1
+    ],
+    "name": "Procesadores de pago",
+    "priority": 8
+  },
+  "42": {
+    "groups": [
+      8
+    ],
+    "name": "Gestores de etiquetas",
+    "priority": 9
+  },
+  "44": {
+    "groups": [
+      9
+    ],
+    "name": "CI",
+    "priority": 3
+  },
+  "45": {
+    "groups": [
+      7
+    ],
+    "name": "Sistemas de control",
+    "priority": 2
+  },
+  "46": {
+    "groups": [
+      4
+    ],
+    "name": "Acceso remoto",
+    "priority": 1
+  },
+  "47": {
+    "groups": [
+      9
+    ],
+    "name": "Desarrollo",
+    "priority": 2
+  },
+  "48": {
+    "groups": [
+      10
+    ],
+    "name": "Almacenamiento en red",
+    "priority": 2
+  },
+  "49": {
+    "groups": [
+      3
+    ],
+    "name": "Lectores de feeds",
+    "priority": 1
+  },
+  "50": {
+    "groups": [
+      3
+    ],
+    "name": "DMS",
+    "priority": 1
+  },
+  "51": {
+    "groups": [
+      9
+    ],
+    "name": "Constructores de páginas",
+    "priority": 1
+  },
+  "52": {
+    "groups": [
+      4,
+      16
+    ],
+    "name": "Chat en vivo",
+    "priority": 9
+  },
+  "53": {
+    "groups": [
+      2,
+      16
+    ],
+    "name": "CRM",
+    "priority": 5
+  },
+  "54": {
+    "groups": [
+      2
+    ],
+    "name": "SEO",
+    "priority": 8
+  },
+  "55": {
+    "groups": [
+      16
+    ],
+    "name": "Contabilidad",
+    "priority": 1
+  },
+  "56": {
+    "groups": [
+      5
+    ],
+    "name": "Mineros de criptomonedas",
+    "priority": 5
+  },
+  "57": {
+    "groups": [
+      9
+    ],
+    "name": "Generador de sitios estáticos",
+    "priority": 1
+  },
+  "58": {
+    "groups": [
+      6
+    ],
+    "name": "Incorporación de usuarios",
+    "priority": 8
+  },
+  "59": {
+    "groups": [
+      9
+    ],
+    "name": "Bibliotecas JavaScript",
+    "priority": 9
+  },
+  "60": {
+    "groups": [
+      7
+    ],
+    "name": "Contenedores",
+    "priority": 8
+  },
+  "62": {
+    "groups": [
+      7
+    ],
+    "name": "PaaS",
+    "priority": 8
+  },
+  "63": {
+    "groups": [
+      7
+    ],
+    "name": "IaaS",
+    "priority": 8
+  },
+  "64": {
+    "groups": [
+      7
+    ],
+    "name": "Proxies inversos",
+    "priority": 7
+  },
+  "65": {
+    "groups": [
+      7
+    ],
+    "name": "Balanceadores de carga",
+    "priority": 7
+  },
+  "66": {
+    "groups": [
+      9
+    ],
+    "name": "Frameworks de UI",
+    "priority": 7
+  },
+  "67": {
+    "groups": [
+      13
+    ],
+    "name": "Cumplimiento de cookies",
+    "priority": 9
+  },
+  "68": {
+    "groups": [
+      9
+    ],
+    "name": "Accesibilidad",
+    "priority": 9
+  },
+  "69": {
+    "groups": [
+      11
+    ],
+    "name": "Autenticación",
+    "priority": 6
+  },
+  "70": {
+    "groups": [
+      11
+    ],
+    "name": "Autoridades de certificados SSL/TLS",
+    "priority": 9
+  },
+  "71": {
+    "groups": [
+      2
+    ],
+    "name": "Programas de afiliados",
+    "priority": 9
+  },
+  "72": {
+    "groups": [
+      14
+    ],
+    "name": "Programación de citas",
+    "priority": 9
+  },
+  "73": {
+    "groups": [
+      8
+    ],
+    "name": "Encuestas",
+    "priority": 9
+  },
+  "74": {
+    "groups": [
+      8
+    ],
+    "name": "Pruebas A/B",
+    "priority": 9
+  },
+  "75": {
+    "groups": [
+      4,
+      2
+    ],
+    "name": "Correo electrónico",
+    "priority": 9
+  },
+  "76": {
+    "groups": [
+      2
+    ],
+    "name": "Personalización",
+    "priority": 9
+  },
+  "77": {
+    "groups": [
+      2
+    ],
+    "name": "Retargeting",
+    "priority": 9
+  },
+  "78": {
+    "groups": [
+      2
+    ],
+    "name": "RUM",
+    "priority": 9
+  },
+  "79": {
+    "groups": [
+      17
+    ],
+    "name": "Geolocalización",
+    "priority": 9
+  },
+  "80": {
+    "groups": [
+      15
+    ],
+    "name": "Temas de WordPress",
+    "priority": 7
+  },
+  "81": {
+    "groups": [
+      15
+    ],
+    "name": "Temas de Shopify",
+    "priority": 7
+  },
+  "82": {
+    "groups": [
+      15
+    ],
+    "name": "Temas de Drupal",
+    "priority": 7
+  },
+  "83": {
+    "groups": [
+      8
+    ],
+    "name": "Huella digital del navegador",
+    "priority": 9
+  },
+  "84": {
+    "groups": [
+      1
+    ],
+    "name": "Fidelización y recompensas",
+    "priority": 9
+  },
+  "85": {
+    "groups": [
+      9
+    ],
+    "name": "Gestión de características",
+    "priority": 9
+  },
+  "86": {
+    "groups": [
+      2
+    ],
+    "name": "Segmentación",
+    "priority": 9
+  },
+  "87": {
+    "groups": [
+      15
+    ],
+    "name": "Plugins de WordPress",
+    "priority": 8
+  },
+  "88": {
+    "groups": [
+      7
+    ],
+    "name": "Alojamiento",
+    "priority": 9
+  },
+  "89": {
+    "groups": [
+      3
+    ],
+    "name": "Traducción",
+    "priority": 9
+  },
+  "90": {
+    "groups": [
+      2,
+      18
+    ],
+    "name": "Reseñas",
+    "priority": 9
+  },
+  "91": {
+    "groups": [
+      1
+    ],
+    "name": "Comprar ahora pagar después",
+    "priority": 9
+  },
+  "92": {
+    "groups": [
+      7
+    ],
+    "name": "Rendimiento",
+    "priority": 9
+  },
+  "93": {
+    "groups": [
+      14
+    ],
+    "name": "Reservas y entregas",
+    "priority": 9
+  },
+  "94": {
+    "groups": [
+      2,
+      1
+    ],
+    "name": "Marketing de referidos",
+    "priority": 9
+  },
+  "95": {
+    "groups": [
+      10
+    ],
+    "name": "Gestión de activos digitales",
+    "priority": 9
+  },
+  "96": {
+    "groups": [
+      2,
+      18
+    ],
+    "name": "Curación de contenido",
+    "priority": 9
+  },
+  "97": {
+    "groups": [
+      2,
+      8
+    ],
+    "name": "Plataforma de datos de clientes",
+    "priority": 9
+  },
+  "98": {
+    "groups": [
+      1
+    ],
+    "name": "Abandono de carrito",
+    "priority": 9
+  },
+  "99": {
+    "groups": [
+      1
+    ],
+    "name": "Transportistas",
+    "priority": 9
+  },
+  "100": {
+    "groups": [
+      15
+    ],
+    "name": "Aplicaciones de Shopify",
+    "priority": 8
+  },
+  "101": {
+    "groups": [
+      6,
+      16
+    ],
+    "name": "Reclutamiento y personal",
+    "priority": 9
+  },
+  "102": {
+    "groups": [
+      1
+    ],
