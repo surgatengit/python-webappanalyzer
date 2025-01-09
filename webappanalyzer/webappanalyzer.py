@@ -9,12 +9,12 @@ import requests
 
 from webappanalyzer.web_page import WebPage
 
-
 class WebAppAnalyzer:
     def __init__(self, update: bool = False, path: pathlib.Path = pathlib.Path("data")):
         self._json_path: pathlib.Path = path
         self._categories_path: pathlib.Path = path / "categories.json"
         self._categories: dict = {}
+        self._etag_cache: dict = {}
         
         path.mkdir(parents=True, exist_ok=True)
 
@@ -23,17 +23,17 @@ class WebAppAnalyzer:
 
         if len(list(path.iterdir())) != len(json_list) + 1 or update:
             for j in json_list:
-                with requests.get(f"https://raw.githubusercontent.com/enthec/webappanalyzer/main/src/technologies/{j}.json", stream=True) as r:
-                    with path.joinpath(f"{j}.json").open("wb") as t:
-                        for chunk in r.iter_content(chunk_size=8192):
-                            t.write(chunk)
+                self._download_if_updated(
+                    f"https://raw.githubusercontent.com/surgatengit/webappanalyzer/main/src/technologies/{j}.json",
+                    path.joinpath(f"{j}.json"),
+                )
 
-            with requests.get("https://raw.githubusercontent.com/enthec/webappanalyzer/main/src/categories.json", stream=True) as r:
-                with self._categories_path.open("wb") as c:
-                    for chunk in r.iter_content(chunk_size=8192):
-                        c.write(chunk)
-        
-        # Load in memory categories
+            self._download_if_updated(
+                "https://raw.githubusercontent.com/surgatengit/webappanalyzer/main/src/categories.json",
+                self._categories_path,
+            )
+
+        # Cargar categorías en memoria
         if self._categories_path.exists():
             with self._categories_path.open("r", encoding="utf-8") as c:
                 self._categories = json.load(c)
@@ -41,7 +41,36 @@ class WebAppAnalyzer:
         self.version_regexp = re.compile(r"^(?:(?P<prefix>.*)?\\(?P<group>\d+)(?:\?(?P<first>.*)?:(?P<second>.*)?)?|(?P<fixed>[a-zA-Z0-9.]+)?)$")     
         cpe_regex: str = r"""cpe:2\.3:[aho\*\-](:(((\?*|\*?)([a-zA-Z0-9\-\._]|(\\[\\\*\?!"#$$%&'\(\)\+,/:;<=>@\[\]\^`\{\|}~]))+(\?*|\*?))|[\*\-])){5}(:(([a-zA-Z]{2,3}(-([a-zA-Z]{2}|[0-9]{3}))?)|[\*\-]))(:(((\?*|\*?)([a-zA-Z0-9\-\._]|(\\[\\\*\?!"#$$%&'\(\)\+,/:;<=>@\[\]\^`\{\|}~]))+(\?*|\*?))|[\*\-])){4}"""
         self._cpe_pattern: re.Pattern = re.compile(cpe_regex)
+
+    def _download_if_updated(self, url: str, filepath: pathlib.Path):
+        """
+        Descarga el archivo desde la URL solo si ha cambiado (usando ETag o Last-Modified).
+        """
+        headers = {}
+
+        # Leer el ETag guardado si existe
+        etag_file = filepath.with_suffix(".etag")
+        if etag_file.exists():
+            with etag_file.open("r") as ef:
+                etag = ef.read().strip()
+                headers["If-None-Match"] = etag
+
+        response = requests.get(url, headers=headers, stream=True)
         
+        if response.status_code == 304:  # No ha cambiado
+            return
+
+        response.raise_for_status()  # Lanza una excepción si la solicitud falla.
+
+        # Guardar el contenido nuevo
+        with filepath.open("wb") as f:
+            f.write(response.content)
+
+        # Guardar el nuevo ETag, si está disponible
+        if "ETag" in response.headers:
+            with etag_file.open("w") as ef:
+                ef.write(response.headers["ETag"])
+    
     def analyze(self, webpage: WebPage):
         detected: list[dict] = []
         for file in self._json_path.iterdir():
