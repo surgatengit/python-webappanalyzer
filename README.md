@@ -1,12 +1,24 @@
 # python-webappanalyzer
 
-In the folder of your choice, copy, paste and run.
+## Install
+```
+Works perfect with virtualenv
+# Install virtualenv
+pipx install virtualenv
+# Create a virtualenviroment
+virtualenv ~/virtual_envs/virtualenviroment
+# Activate virtualenv
+source ~/virtual_envs/virtualenviroment/bin/activate
+# Quit virtualenv
+deactivate
+```
+Choice a folder and run.
 ```bash
 git clone https://github.com/surgatengit/python-webappanalyzer && cd python-webappanalyzer && pip install -r requirements.txt && echo "Ready, Use: python scanwebtech.py <URL>"
 ```
 Use
 ```bash
-python scanwebtechs.py <URL>
+python scanwebtech.py <URL>
 ```
 
 For CTF you can use jq like this
