@@ -13,15 +13,16 @@ class WebAppAnalyzer:
     def __init__(self, update: bool = False, path: pathlib.Path = pathlib.Path("data")):
         self._json_path: pathlib.Path = path
         self._categories_path: pathlib.Path = path / "categories.json"
+        self._etag_cache_file: pathlib.Path = path / "etag_cache.json"
         self._categories: dict = {}
-        self._etag_cache: dict = {}
-        
+        self._etag_cache: dict = self._load_etag_cache()
+
         path.mkdir(parents=True, exist_ok=True)
 
         json_list = list(string.ascii_lowercase)
         json_list.append("_")
 
-        if len(list(path.iterdir())) != len(json_list) + 1 or update:
+        if len(list(path.iterdir())) != len(json_list) + 2 or update:  # +2 por categories.json y etag_cache.json
             for j in json_list:
                 self._download_if_updated(
                     f"https://raw.githubusercontent.com/surgatengit/webappanalyzer/main/src/technologies/{j}.json",
@@ -32,7 +33,9 @@ class WebAppAnalyzer:
                 "https://raw.githubusercontent.com/surgatengit/webappanalyzer/main/src/categories.json",
                 self._categories_path,
             )
-
+        
+        self._save_etag_cache()
+        
         # Cargar categorías en memoria
         if self._categories_path.exists():
             with self._categories_path.open("r", encoding="utf-8") as c:
@@ -42,18 +45,26 @@ class WebAppAnalyzer:
         cpe_regex: str = r"""cpe:2\.3:[aho\*\-](:(((\?*|\*?)([a-zA-Z0-9\-\._]|(\\[\\\*\?!"#$$%&'\(\)\+,/:;<=>@\[\]\^`\{\|}~]))+(\?*|\*?))|[\*\-])){5}(:(([a-zA-Z]{2,3}(-([a-zA-Z]{2}|[0-9]{3}))?)|[\*\-]))(:(((\?*|\*?)([a-zA-Z0-9\-\._]|(\\[\\\*\?!"#$$%&'\(\)\+,/:;<=>@\[\]\^`\{\|}~]))+(\?*|\*?))|[\*\-])){4}"""
         self._cpe_pattern: re.Pattern = re.compile(cpe_regex)
 
+    def _load_etag_cache(self) -> dict:
+        """Carga el archivo de caché de ETag."""
+        if self._etag_cache_file.exists():
+            with self._etag_cache_file.open("r", encoding="utf-8") as f:
+                return json.load(f)
+        return {}
+
+    def _save_etag_cache(self):
+        """Guarda el archivo de caché de ETag."""
+        with self._etag_cache_file.open("w", encoding="utf-8") as f:
+            json.dump(self._etag_cache, f, indent=4)
+
     def _download_if_updated(self, url: str, filepath: pathlib.Path):
-        """
-        Descarga el archivo desde la URL solo si ha cambiado (usando ETag o Last-Modified).
-        """
+
         headers = {}
+        etag_key = str(filepath.name)
 
         # Leer el ETag guardado si existe
-        etag_file = filepath.with_suffix(".etag")
-        if etag_file.exists():
-            with etag_file.open("r") as ef:
-                etag = ef.read().strip()
-                headers["If-None-Match"] = etag
+        if etag_key in self._etag_cache:
+            headers["If-None-Match"] = self._etag_cache[etag_key]
 
         response = requests.get(url, headers=headers, stream=True)
         
@@ -66,10 +77,9 @@ class WebAppAnalyzer:
         with filepath.open("wb") as f:
             f.write(response.content)
 
-        # Guardar el nuevo ETag, si está disponible
+        # Actualizar el ETag en la caché
         if "ETag" in response.headers:
-            with etag_file.open("w") as ef:
-                ef.write(response.headers["ETag"])
+            self._etag_cache[etag_key] = response.headers["ETag"]
     
     def analyze(self, webpage: WebPage):
         detected: list[dict] = []
