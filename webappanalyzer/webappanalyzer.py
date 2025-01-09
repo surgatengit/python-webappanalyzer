@@ -10,19 +10,21 @@ import requests
 from webappanalyzer.web_page import WebPage
 
 class WebAppAnalyzer:
-    def __init__(self, update: bool = False, path: pathlib.Path = pathlib.Path("data")):
+    def __init__(self, update: bool = False, path: pathlib.Path = pathlib.Path("data"), etag_path: pathlib.Path = pathlib.Path("data2")):
         self._json_path: pathlib.Path = path
         self._categories_path: pathlib.Path = path / "categories.json"
+        self._etag_cache_path: pathlib.Path = etag_path
         self._etag_cache_file: pathlib.Path = path / "etag_cache.json"
         self._categories: dict = {}
         self._etag_cache: dict = self._load_etag_cache()
 
         path.mkdir(parents=True, exist_ok=True)
+        etag_path.mkdir(parents=True, exist_ok=True)
 
         json_list = list(string.ascii_lowercase)
         json_list.append("_")
 
-        if len(list(path.iterdir())) != len(json_list) + 2 or update:  # +2 por categories.json y etag_cache.json
+        if len(list(path.iterdir())) != len(json_list) + 1 or update:
             for j in json_list:
                 self._download_if_updated(
                     f"https://raw.githubusercontent.com/surgatengit/webappanalyzer/main/src/technologies/{j}.json",
@@ -68,16 +70,14 @@ class WebAppAnalyzer:
 
         response = requests.get(url, headers=headers, stream=True)
         
-        if response.status_code == 304:  # No ha cambiado
+        if response.status_code == 304:
             return
 
-        response.raise_for_status()  # Lanza una excepción si la solicitud falla.
+        response.raise_for_status()
 
-        # Guardar el contenido nuevo
         with filepath.open("wb") as f:
             f.write(response.content)
 
-        # Actualizar el ETag en la caché
         if "ETag" in response.headers:
             self._etag_cache[etag_key] = response.headers["ETag"]
     
