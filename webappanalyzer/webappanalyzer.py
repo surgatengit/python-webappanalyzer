@@ -14,7 +14,7 @@ class WebAppAnalyzer:
         self._json_path: pathlib.Path = path
         self._categories_path: pathlib.Path = path / "categories.json"
         self._etag_cache_path: pathlib.Path = etag_path
-        self._etag_cache_file: pathlib.Path = path / "etag_cache.json"
+        self._etag_cache_file: pathlib.Path = etag_path / "etag_cache.json"
         self._categories: dict = {}
         self._etag_cache: dict = self._load_etag_cache()
 
